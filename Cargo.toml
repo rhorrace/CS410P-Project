@@ -1,0 +1,8 @@
+[package]
+name = "project"
+version = "0.1.0"
+authors = ["rhorrace"]
+
+[dependencies]
+rand = "0.3"
+cargonauts-cli = "0.2.3"
