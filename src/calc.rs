@@ -5,7 +5,7 @@
   the value of a player's hand,
   two cards, the flop, the turn,
   and the river. 0 is the high card
-  and 10 is the royal flush 
+  and 9 is the royal flush 
 */
 
 
@@ -184,14 +184,17 @@ impl Calc {
               break;
             }
           }
-          match have {
-            true  => return 9,
-            false => return 8,
+          match have {                    // If has allcards for RF
+            true  => return 9,            // Royal Flush
+            false => return 8,            // Straight Flush
           }
         }
       }
       else {
-        return 5;
+        match fours {                     // If Four of a Kind
+          1 => return 7,                  // Four of a kind
+          _ => return 5,                  // Flush
+        }
       }
     }
     else if straight {                    // If straight
@@ -205,7 +208,7 @@ impl Calc {
         (0,1) => return 1,                // One pair
         (0,_) => return 2,                // Two pair
         (1,0) => return 3,                // Three of a kind
-        (_,_) => return 6,                // Full house
+        (_,_) => return 5,                // Full house
       }
     }
     0
