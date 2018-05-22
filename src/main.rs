@@ -17,6 +17,7 @@ use game::*;
 
 fn main() {
   print!("{}[2J",27 as char);
+  print!("{}[2J",27 as char);
   let mut game = Game::new();
   game.set();
   println!("Welcome to the Texas Hold'em Player.");

@@ -45,6 +45,7 @@ impl Ord for Card {
   }
 }
 */
+
 impl Card {
   /* Initialize the card */
   pub fn new() -> Card {
@@ -54,7 +55,7 @@ impl Card {
  
   /* Check if card Is the card */
   pub fn is(self, other: &Self) -> bool {
-    self.name== other.name && self.suit == other.suit
+    self.name == other.name && self.suit == other.suit
   }
 
   /* Return the value of the card */

@@ -37,7 +37,7 @@ impl Calc {
     self.suit_cnt = [0; 5];
   }
 
-  /* Check is hand contains a certain card */
+  /* Check if hand contains a certain card */
   fn contains(self,val: i64, st: i64) -> bool {
     self.plyr_hnd.iter().any(|&x| x.value() == val && x.suit() == st)
   }
@@ -208,7 +208,7 @@ impl Calc {
         (0,1) => return 1,                // One pair
         (0,_) => return 2,                // Two pair
         (1,0) => return 3,                // Three of a kind
-        (_,_) => return 5,                // Full house
+        (_,_) => return 6,                // Full house
       }
     }
     0
