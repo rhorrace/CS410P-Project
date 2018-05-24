@@ -12,18 +12,21 @@ mod dealer;
 mod player;
 mod table;
 mod calc;
+mod com;
 
 use game::*;
 
 fn main() {
-  print!("{}[2J",27 as char);
-  print!("{}[2J",27 as char);
+  for _ in 0..5 {
+    println!("{}[2J",27 as char);
+  }
   let mut game = Game::new();
   game.set();
   println!("Welcome to the Texas Hold'em Player.");
   println!("Warning: This is a prototope.\n");
-  println!("It can only operate with one player\n");
-  println!("and it is not meant for public use.");
+  println!("you will be facing a computer\n"); 
+  println!("and can not determine who is the winner yet.\n");
+  println!("It is not meant for public use.");
   println!("ENTER: Continue, 1: Quit");
   
   /* Check user roption */
@@ -37,7 +40,7 @@ fn main() {
   loop {
     print!("{}[2J",27 as char);
     game.deal();
-    game.player1();
+    game.player();
     println!("---------------------");
     println!("ENTER: Continue, 1: Quit");
 
@@ -51,7 +54,7 @@ fn main() {
     game.flop();
     game.table();
     println!("---------------------");
-    game.player1();
+    game.player();
     println!("---------------------");
     println!("ENTER: Continue, 1: Quit");
 
@@ -65,7 +68,7 @@ fn main() {
     game.turn();
     game.table();
     println!("---------------------");
-    game.player1();
+    game.player();
     println!("---------------------");
     println!("ENTER: Continue, 1: Quit");
 
@@ -79,10 +82,25 @@ fn main() {
     game.river();
     game.table();
     println!("---------------------");
-    game.player1();
+    game.player();
     println!("---------------------");
     println!("ENTER: Continue, 1: Quit");
 
+    /* Check user option */
+    if read_user() == 1 {
+      break;
+    }
+    print!("{}[2J",27 as char);
+    
+    /* Display computer's hand stage */
+    game.computer();
+    println!("---------------------");
+    game.table();
+    println!("---------------------");
+    game.player();
+    println!("---------------------");
+    println!("ENTER: Continue, 1: Quit");
+    
     /* Check user option */
     if read_user() == 1 {
       break;

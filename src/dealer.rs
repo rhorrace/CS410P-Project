@@ -36,15 +36,18 @@ impl Dealer {
 
   /* Check if size of deck is enough for a play */
   pub fn check_deck(self) -> bool {
-    self.deck.size() >= 7
+    self.deck.size() >= 9
   }
 
   /* "Remove" two cards from top of deck and give to player */
-  pub fn deal(&mut self) -> [Card; 2] {
-    let mut hand = [Card::new(); 2];
-    hand[0] = self.deck.rem();
-    hand[1] = self.deck.rem();
-    hand
+  pub fn deal(&mut self) -> [[Card; 2]; 2] {
+    let mut hands = [[Card::new();2]; 2];
+    for i in 0..2 {
+      for j in 0..2 {
+        hands[j][i] = self.deck.rem();
+      }
+    }
+    hands
   }
 
   /* Return cards for the flop */

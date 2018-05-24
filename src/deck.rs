@@ -64,7 +64,7 @@ impl Deck {
   pub fn shuffle(&mut self) {
     /* shuffles the deck ten times */
     let mut rng = StdRng::new().unwrap();
-    for _ in 0..10 {
+    for _ in 0..20 {
       rng.shuffle(&mut self.cards);
     }
   }

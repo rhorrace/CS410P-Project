@@ -12,6 +12,7 @@ use dealer::*;
 use player::*;
 use table::*;
 use calc::*;
+use com::*;
 
 /* Read input from the user */
 pub fn read_user() -> i64 {
@@ -46,19 +47,20 @@ pub fn read_user() -> i64 {
 /* Game that holds the player(s), dealer, table, and calc*/
 #[derive(Clone,Copy)]
 pub struct Game {
-  player1: Player,
+  player: Player,
+  computer: Com,
   dealer: Dealer,
   table: Table,
-  calc1: Calc,
+  calc: Calc,
 }
 
 impl Game {
   pub fn new() -> Game {
-    Game { player1: Player::new(),
+    Game { player: Player::new(),
+           computer: Com::new(),
            dealer: Dealer::new(),
            table: Table::new(),
-           calc1: Calc::new(),
-         }
+           calc: Calc::new(), }
   }
  
   /* Check if dealer has enough cards */
@@ -77,42 +79,49 @@ impl Game {
     self.dealer.shuffle();
   }
   
-  /*Clear table, calc(s), and player(s)*/
+  /*Clear table, calc, computer and player*/
   pub fn clear(&mut self) {
-    self.player1.clear();
-    self.calc1.clear();
+    self.player.clear();
+    self.computer.clear();
+    self.calc.clear();
     self.table.clear();
   }
 
   pub fn deal(&mut self) {
-    let hand = self.dealer.deal();
-    self.player1.rcv_hand(hand);
-    self.calc1.add_hand(hand);
-    self.player1.update();
+    let hands = self.dealer.deal();
+    self.player.rcv_hand(hands[0]);
+    self.calc.add_hand(hands[0]);
+    self.computer.rcv_hand(hands[1]);
   }
 
   /* Flop stage, put flop on table, update player's hand value */
   pub fn flop(&mut self) { 
     let flop = self.dealer.flop();
     self.table.add_flop(flop);
-    self.calc1.add_cards(flop);
-    self.player1.update_fold(self.calc1.calc_hand());
+    self.calc.add_cards(flop);
+    self.player.update(self.calc.calc_hand());
+    self.computer.add_cards(flop);
+    self.computer.update();
   }
 
   /* Turn stage, put turn on table, update player's hand value */
   pub fn turn(&mut self) { 
     let turn = self.dealer.turn();
     self.table.add_turn(turn);
-    self.calc1.add(turn);
-    self.player1.update_turn(self.calc1.calc_hand());
+    self.calc.add(turn);
+    self.player.update(self.calc.calc_hand());
+    self.computer.add(turn);
+    self.computer.update();
   }
 
   /* River stage, put river on table, update player's hand value */
   pub fn river(&mut self) {
     let river = self.dealer.river();
     self.table.add_river(river);
-    self.calc1.add(river);
-    self.player1.update_river(self.calc1.calc_hand());
+    self.calc.add(river);
+    self.player.update(self.calc.calc_hand());
+    self.computer.add(river);
+    self.computer.update();
   }
 
   /* Display table */
@@ -120,8 +129,13 @@ impl Game {
     self.table.display();
   }
   
-  pub fn player1(self) {
-    self.player1.display();
-    println!("Value of hand: {}", self.player1.get_combo());
+  pub fn player(self) {
+    print!("Player's ");
+    self.player.display();
+    println!("Player's hand value: {}", self.player.get_combo());
+  }
+
+  pub fn computer(self) {
+    self.computer.display();
   }
 }

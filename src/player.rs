@@ -12,14 +12,14 @@ use card::*;
 #[derive(Clone,Copy)]
 pub struct Player {
   hand: [Card; 2],
-  combo: u64, /* 0 for high card, 9 for Royal flush */
+  combo: u64, // 0 for high card, 9 for Royal flush
 }
 
 impl Player {
   /* Initialize new player */
   pub fn new() -> Player {
     Player { hand: [Card::new(); 2],
-             combo: 0 }
+             combo: 0, }
   }
   
   /* Clean hand */
@@ -43,7 +43,7 @@ impl Player {
       6 => "Full House",
       7 => "Four of a Kind",
       8 => "Straight Flush",
-      9 => "Rpyal Flush",
+      9 => "Royal Flush",
       _ => "High Card",
     }
   } 
@@ -51,34 +51,16 @@ impl Player {
   /* receive the hand */
   pub fn rcv_hand(&mut self,hnd: [Card; 2]) {
     self.hand = hnd;
-  }
-
-  /* Updates player hand value before the flop */
-  pub fn update(&mut self) {
     match self.hand[0].value() == self.hand[1].value() {
       true  => self.combo = 1,
       false => self.combo = 0,
     }
   }
-  
-  /* Update after fold */
-  pub fn update_fold(&mut self,fld_combo: u64) {
-    if self.combo != fld_combo {
-      self.combo = fld_combo;
-    }
-  }
 
-  /* Update after turn */
-  pub fn update_turn(&mut self,trn_combo: u64) {
-    if self.combo != trn_combo {
-      self.combo = trn_combo;
-    }
-  }
-
-  /* Update after river */
-  pub fn update_river(&mut self,rvr_combo: u64) {
-    if self.combo != rvr_combo {
-      self.combo = rvr_combo;  
+  /* Updates player hand value after each phase */
+  pub fn update(&mut self,cmbo: u64) {
+    if self.combo != cmbo {
+      self.combo = cmbo;
     }
   }
 

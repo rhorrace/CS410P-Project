@@ -172,7 +172,7 @@ impl Calc {
     let threes = self.cnt(3);            // Count three of kinds
     let fours = self.cnt(4);             // Count four of kinds
     let flush = self.contains_st_cnt(5); // Check flush
-    let straight = self.check_strght();
+    let straight = self.check_strght();  // Check straight
     if flush {                           // If flush
       let suit = self.max_suit();
       if straight {                      // If straight
@@ -211,6 +211,6 @@ impl Calc {
         (_,_) => return 6,                // Full house
       }
     }
-    0
+    0                                     // High card
   } 
 } 

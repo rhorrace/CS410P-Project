@@ -8,7 +8,9 @@ project written in Rust. So far,
 this is a prototype and only is half,  
 if not mostly done. Current;y, it compiles
 with no warning s and so far does what it  
-needs to do.  
+needs to do. The program currently has a card,
+a deck, a dealer, a player, a computer, a calc,  
+a game, and a main. 
 
 There is a card that holds two integers from  
 2 to 14 and the suits from 0 to 4.  
@@ -37,6 +39,10 @@ The player holds two cards (the hand) and a value for the
 combo. The hand value (combo) will be updated before the flop,  
 after it, after the turn, and after the river.  
 
+The computer has its own hand and calc for determine its  
+hand's value. The functions are similar to player and will  
+all be used.
+
 The calc holds copies of the cards that have been played, which  
 the cards are the hand, the flop, turn, and river. The cards are  
 sorted by value for easier use. For calculating the hand, the  
@@ -50,8 +56,16 @@ three of a kinds and/or at least one pair, it is a full house. If there is
 one three of a kind, then three of kind. If there are two or more pairs,  
 two pairs, if one,one pair, and if all checks fail, high card.
 
-The game holds the table, the dealer, the player, and calc, and runs the game.
+The game holds the table, the dealer, the computer, the player,  
+and calc, and runs the phases of the game. 
 
-Main runs the game.
+Main runs the game. The game has multiple stages. There is welcome  
+stage where the program welcomes the player. There is a deal stage  
+where the player and the computer gets their hands from the dealer.
+There is a stage where the flop is played and the hand values are  
+updated to correspond with the flop. The turn is then dealt and the  
+hands are update accordingly. The river is then dealt and the hands  
+are updated again afterwards. After the river, the computer's hand  
+is displayed.
 
 Hopefully all of this will work in the end, so far it does.
