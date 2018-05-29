@@ -13,7 +13,7 @@ a deck, a dealer, a player, a computer, a calc,
 a game, and a main. 
 
 There is a card that holds two integers from  
-2 to 14 and the suits from 0 to 4.  
+2 to 14 and the suits from 0 to 3.  
 The 0 value is a joker for the card, and nothing  
 for the suit. 11-14 on the values is Jack to Ace  
 and the suits values represent Hearts, Spades,  
@@ -58,6 +58,24 @@ two pairs, if one,one pair, and if all checks fail, high card.
 
 The game holds the table, the dealer, the computer, the player,  
 and calc, and runs the phases of the game. 
+
+The tie module holds the tie breaking functions, meaning if both  
+the player and the computer have both the same hand value, (ex. High card v High card)  
+For all hands, except for the royal flush are compared by collecting the  
+respected values of the player's and computer's handand comparing  
+the cards from highest value to lowest value. If the values are the same,  
+it is a tie. The following cards are used for the specific hands:
+  * High card: Highest five cards, high to low
+  * One pair: pair, 3 highest cards (kickers)
+  * Two pair: Highest 2 pairs, Highest kicker (one card)
+  * Three of a kind: the three of a kind, 2 kickers
+  * Straight: Highest 5 card increment (ex. 1,2,3,4,5) High to low
+  * Flush: Highest five cards of the same suit
+  * Full House: High three of kind, then highest pair/three of kind
+  * Four of a kind: Four of a kind, and highest kicker
+  * Straight Flush: Highest 5 incremented card values of same suit, high to low
+  * Royal flush: Auto matic tie, most likely impossible
+  *
 
 Main runs the game. The game has multiple stages. There is welcome  
 stage where the program welcomes the player. There is a deal stage  
