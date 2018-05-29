@@ -28,7 +28,7 @@ impl Player {
     self.combo = 0;
   }
 
-  pub fn _get_val(self) -> u64 {
+  pub fn get_val(self) -> u64 {
     self.combo
   }
 

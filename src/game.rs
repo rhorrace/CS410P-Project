@@ -13,6 +13,7 @@ use player::*;
 use table::*;
 use calc::*;
 use com::*;
+use tie::*;
 
 /* Read input from the user */
 pub fn read_user() -> i64 {
@@ -21,13 +22,19 @@ pub fn read_user() -> i64 {
   loop {
     buffer.clear();
     let _ = stdout().flush();
-    stdin().read_line(&mut buffer).expect("failed");
-    if buffer.trim().is_empty() {
+    stdin().read_line(&mut buffer)
+           .expect("failed");
+    if buffer.trim()
+             .is_empty() {
       x = 0;
       break;
     }
-    else if buffer.trim().parse::<i64>().is_ok() {
-      x = buffer.trim().parse::<i64>().unwrap();
+    else if buffer.trim()
+                  .parse::<i64>()
+                  .is_ok() {
+      x = buffer.trim()
+                .parse::<i64>()
+                .unwrap();
       if x != 1 {
         println!("Error: Not a valid number");
         println!("ENTER: Continue, 1: Quit");
@@ -134,5 +141,39 @@ impl Game {
 
   pub fn computer(self) {
     self.computer.display();
+  }
+
+  pub fn winner(self) {
+    let c = self.computer.get_val();
+    let p = self.player.get_val();
+    if c > p {                      // If com has higher value
+      println!("Sorry, you lose");
+    }
+    else if p > c {                 // If player has higher value
+      println!("Yay, you win");
+    }
+    else {                          // If tie
+      let win = self.tie(p);
+      match win {
+        -1 => println!("Sorry, you lose"),
+         1 => println!("Yay, you win"),
+         _ => println!("It's a tie"),
+      }
+    }
+  }
+
+  fn tie(self,val: u64) -> i64 {
+    match val {
+      0 => high_card(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
+      1 => one_pair(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
+      2 => two_pair(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
+      3 => three_of_kind(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
+      4 => straight(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
+      5 => flush(self.computer.get_hnd(),self.computer.max_suit(),self.calc.get_hnd(),self.calc.max_suit()),
+      6 => full_house(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
+      7 => four_of_kind(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
+      8 => straight_flush(self.computer.get_hnd(),self.computer.max_suit(),self.calc.get_hnd(),self.calc.max_suit()),
+      _ => 0,
+    }
   }
 }

@@ -13,19 +13,21 @@ mod player;
 mod table;
 mod calc;
 mod com;
+mod tie;
 
 use game::*;
 
 fn main() {
-  for _ in 0..5 {
-    println!("{}[2J",27 as char);
+  for _ in 0..100 {
+    println!();
   }
   let mut game = Game::new();
   game.set();
   println!("Welcome to the Texas Hold'em Player.");
-  println!("Warning: This is a prototope.\n");
-  println!("you will be facing a computer\n"); 
-  println!("and can not determine who is the winner yet.\n");
+  println!("Warning: This is a prototope.");
+  println!("you will be facing a computer"); 
+  println!("and can not determine who is the winner");
+  println!("of tie yet.");
   println!("It is not meant for public use.");
   println!("ENTER: Continue, 1: Quit");
   
@@ -99,6 +101,7 @@ fn main() {
     println!("---------------------");
     game.player();
     println!("---------------------");
+    game.winner();
     println!("ENTER: Continue, 1: Quit");
     
     /* Check user option */

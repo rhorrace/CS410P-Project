@@ -3,7 +3,7 @@
   This is the Rust file with
   the calculator that determines
   the value of a player's hand,
-  two cards, the flop, the turn,
+  two plyr_hnd, the flop, the turn,
   and the river. 0 is the high card
   and 9 is the royal flush 
 */
@@ -29,6 +29,16 @@ impl Calc {
           suit_cnt: [0; 5] }
   }
 
+  /* Get hand function */
+  pub fn get_hnd(self) -> [Card; 7] {
+    self.plyr_hnd
+  }
+
+  /* Get card count function */
+  pub fn get_card_cnt(self) -> [i64; 15] {
+    self.card_cnt
+  }
+
   /* Clear the hand, set size to 0, so on and so forth */
   pub fn clear(&mut self) {
     self.plyr_hnd = [Card::new(); 7];
@@ -39,13 +49,16 @@ impl Calc {
 
   /* Check if hand contains a certain card */
   fn contains(self,val: i64, st: i64) -> bool {
-    self.plyr_hnd.iter().any(|&x| x.value() == val && x.suit() == st)
+    self.plyr_hnd.iter()
+                 .any(|&x| x.value() == val && x.suit() == st)
   }
 
   /* Get maximum suit , will only be used when there is a flush */
-  fn max_suit(self) -> i64 {
+  pub fn max_suit(self) -> i64 {
     let mut i = 0;
-    for (j, &val) in self.suit_cnt.iter().skip(1).enumerate() {
+    for (j, &val) in self.suit_cnt.iter()
+                                  .skip(1)
+                                  .enumerate() {
       if val > self.suit_cnt[i] {
         i = j;
       }
@@ -114,60 +127,78 @@ impl Calc {
   
   /* Check specific suit count */
   fn contains_st_cnt(self, cnt: i64) -> bool {
-    self.suit_cnt.iter().skip(1).any(|&x| x >= cnt)
+    self.suit_cnt.iter()
+                 .skip(1)
+                 .any(|&x| x >= cnt)
   }
 
   /* Count specific card amount */
   fn cnt(self, val: i64) -> i64 {
-    self.card_cnt.iter().skip(2).filter(|x| **x == val).count() as i64
+    self.card_cnt.iter()
+                 .skip(2)
+                 .filter(|x| **x == val)
+                 .count() as i64
   }
 
   /* Check if a straight is in hand */
   fn check_strght(self) -> bool {
-    let mut consec = 0;
-    for i in self.card_cnt.iter().skip(1) {
-      if *i >= 1 {
-        consec += 1;
-        if consec == 5 {
-          return true;
-        }
+    let len = self.card_cnt.iter()
+                           .skip(1)
+                           .filter(|x| **x > 0)
+                           .count();
+    if len < 5 {
+      return false;
+    }
+    let strght = self.card_cnt.iter()
+                              .skip(1)
+                              .enumerate()
+                              .filter(|(_,x)| **x > 0);
+    let mut prev = 0;
+    let mut count = 1;
+    for (i,_) in strght {
+      if i == prev + 1 {
+        count += 1;
       }
       else {
-        consec = 0;
+        if count >= 5 {
+          break;
+        }
+        count = 1;
       }
+      prev = i;
     }
-    false
+    count >= 5
   }
 
   /* Check for straight flush */
   fn straight_flush(self,st: i64) -> bool {
     let mut prev = 0;
     let mut count = 0;
-    if self.plyr_hnd.iter().any(|&x| x.value() == 14 && x.suit() == st) {
+    if self.plyr_hnd.iter()
+                 .any(|&x| x.value() == 14 && x.suit() == st) {
       prev = 1;
       count = 1;
     }
-    for crd in self.plyr_hnd.iter().filter(|x| x.suit() == st) {
-      if crd.value() == prev {
-        continue;
-      }
-      else if crd.value() == prev + 1 {
+    for crd in self.plyr_hnd.iter()
+                         .filter(|x| x.suit() == st) {
+      if crd.value() == prev + 1 {
         count += 1;
         prev += 1;
-        if count == 5 {
-          return true;
-        }
       }
       else {
         prev = crd.value();
         count = 1;
       }
     }
+    if count >= 5 {
+      return true;
+    }
     false
   }
 
   /* Calculate hand value */
   pub fn calc_hand(self) -> u64 {
+    let mut val: u64 = 0;
     let pairs = self.cnt(2);             // Count pairs
     let threes = self.cnt(3);            // Count three of kinds
     let fours = self.cnt(4);             // Count four of kinds
@@ -184,33 +215,35 @@ impl Calc {
               break;
             }
           }
-          match have {                    // If has allcards for RF
-            true  => return 9,            // Royal Flush
-            false => return 8,            // Straight Flush
+          match have {                    // If has allplyr_hnd for RF
+            true  => val = 9,             // Royal Flush
+            false => val = 8,             // Straight Flush
           }
         }
       }
       else {
         match fours {                     // If Four of a Kind
-          1 => return 7,                  // Four of a kind
-          _ => return 5,                  // Flush
+          1 => val = 7,                   // Four of a kind
+          _ => val = 5,                   // Flush
         }
       }
     }
     else if straight {                    // If straight
-      return 4;
+      val = 4;
     }
     else if fours == 1 {                  // If four of a kind
-      return 7;
+      val = 7;
     }
     else if threes >= 1 || pairs >= 1 {   // If pairs or threes of kind
       match (threes,pairs) {
-        (0,1) => return 1,                // One pair
-        (0,_) => return 2,                // Two pair
-        (1,0) => return 3,                // Three of a kind
-        (_,_) => return 6,                // Full house
+        (0,1) => val = 1,                 // One pair
+        (0,_) => val = 2,                 // Two pair
+        (1,0) => val = 3,                 // Three of a kind
+        (_,_) => val = 6,                 // Full house
       }
     }
-    0                                     // High card
+    val                                   // High card if all flags fail
   } 
+  
+
 } 

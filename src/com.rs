@@ -26,6 +26,25 @@ impl Com {
           calc: Calc::new(), }
   }
 
+  pub fn get_val(self) -> u64 {
+    self.hand.get_val()
+  }
+
+  /* Get hand function */
+  pub fn get_hnd(self) -> [Card; 7] {
+    self.calc.get_hnd()
+  }
+
+  /* Get card count function */
+  pub fn get_card_cnt(self) -> [i64; 15] {
+    self.calc.get_card_cnt()
+  }
+  
+  /* Get maximum suit in hand,only when there is flush */
+  pub fn max_suit(self) -> i64 {
+    self.calc.max_suit()
+  } 
+  
   /* Clear function, cleans up variables for next game*/
   pub fn clear(&mut self) {
     self.hand.clear();
