@@ -74,8 +74,7 @@ it is a tie. The following cards are used for the specific hands:
   * Full House: High three of kind, then highest pair/three of kind
   * Four of a kind: Four of a kind, and highest kicker
   * Straight Flush: Highest 5 incremented card values of same suit, high to low
-  * Royal flush: Auto matic tie, most likely impossible
-  *
+  * Royal flush: Automatic tie, even though it is statistically impossible
 
 Main runs the game. The game has multiple stages. There is welcome  
 stage where the program welcomes the player. There is a deal stage  
