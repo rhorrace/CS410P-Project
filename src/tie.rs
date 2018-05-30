@@ -28,7 +28,6 @@ pub fn high_card(com: [i64; 15],plyr: [i64; 15]) -> i64 {
     else if i < j {                     // If player has higher value
       return 1;
     }
-    continue;
   }
   0                                     // Tie
 }
@@ -76,18 +75,22 @@ pub fn one_pair(com: [i64; 15],plyr: [i64; 15]) -> i64 {
 }
 
 pub fn two_pair(com: [i64; 15],plyr: [i64; 15]) -> i64 {
-  let c = com.iter()                    // Highest two pairs
+  let c = com.iter()                // Highest two pairs
              .enumerate()
              .skip(2)
              .filter(|(_,x)| **x == 2)
              .rev()
              .take(2);
-  let p = plyr.iter()                   // Highest two pairs
+  let p = plyr.iter()               // Highest two pairs
               .enumerate()
               .skip(2)
               .filter(|(_,x)| **x == 2)
               .rev()
               .take(2);
+  let mut c_prs = [0; 2];
+  let mut p_prs = [0; 2];
+  let mut c_sz = 0;
+  let mut p_sz = 0;
   for ((i,_),(j,_)) in c.zip(p) {
     if i > j {                          // If computer wins
       return -1;
@@ -95,18 +98,22 @@ pub fn two_pair(com: [i64; 15],plyr: [i64; 15]) -> i64 {
     else if i < j {                     // If player wins
       return 1;
     }
+    c_prs[c_sz] = i;                    // Collect used pairs
+    p_prs[p_sz] = j;                    // Collect used pairs
+    c_sz += 1;
+    p_sz += 1;
   }
   /* Tie, check kickers */
   let c_kick = com.iter()               // Kicker (highest card)
                   .enumerate()
                   .skip(2)
-                  .filter(|(_,x)| **x == 1)
+                  .filter(|(x,y)| **y > 0 && c_prs.iter().any(|z| *x != *z))
                   .rev()
                   .take(1);
   let p_kick = plyr.iter()              // Kicker (highest card)
                    .enumerate()
                    .skip(2)
-                   .filter(|(_,x)| **x == 1)
+                   .filter(|(x,y)| **y > 0 && p_prs.iter().any(|z| *x != *z))
                    .rev()
                    .take(1);
   for ((i,_),(j,_)) in c_kick.zip(p_kick) {
@@ -255,8 +262,8 @@ pub fn full_house(com: [i64; 15],plyr: [i64; 15]) -> i64 {
               .filter(|(_,x)| **x == 3)
               .rev()
               .take(1);
-  let mut c3 = 0;
-  let mut p3 = 0;
+  let mut c_trip = 0;
+  let mut p_trip = 0;
   for ((i,_),(j,_)) in c.zip(p) {       // Will only execute once, no loop
     if i > j {                          // If computer wins
       return -1;
@@ -264,19 +271,19 @@ pub fn full_house(com: [i64; 15],plyr: [i64; 15]) -> i64 {
     else if i < j {                     // If player wins
       return 1;
     }
-    c3 = i;                             // Get value
-    p3 = j;                             // Get value
+    c_trip = i;                         // Get value
+    p_trip = j;                         // Get value
   }        
   let c_p = com.iter()                  // Get the next highest pair/three of a kind
                .enumerate()
                .skip(2)
-               .filter(|(x,y)| (**y == 2 || **y == 3) && *x != c3)
+               .filter(|(x,y)| (**y == 2 || **y == 3) && *x != c_trip)
                .rev()
                .take(1);
   let p_p = plyr.iter()                 // Get the next highest pair/three of a kind
                 .enumerate()
                 .skip(2)
-                .filter(|(x,y)| (**y == 2 || **y == 3) && *x != p3)
+                .filter(|(x,y)| (**y == 2 || **y == 3) && *x != p_trip)
                 .rev()
                 .take(1);
   for ((i,_),(j,_)) in c_p.zip(p_p) {
@@ -310,13 +317,13 @@ pub fn four_of_kind(com: [i64; 15],plyr: [i64; 15]) -> i64 {
   /* Tie */
   let c_kick = com.iter()               // Kicker (next highest card)
                   .enumerate()
-                  .skip(1)
+                  .skip(2)
                   .filter(|(_,x)| **x < 4 && **x != 0)
                   .rev()
                   .take(1);
   let p_kick = com.iter()               // Kickers (next highest card)
                   .enumerate()
-                  .skip(1)
+                  .skip(2)
                   .filter(|(_,x)| **x < 4 && **x != 0)
                   .rev()
                   .take(1);
@@ -341,34 +348,47 @@ pub fn straight_flush(com: [Card; 7],c_suit: i64,plyr: [Card; 7],p_suit: i64) ->
   let mut c_strght = [0; 5];
   let mut p_strght = [0; 5];
   let mut c_size = 0;
-  let mut p_size = 0; 
+  let mut p_size = 0;
   for (i,j) in c.zip(p) {               // Get straights from both hands
     if c_size != 5 {                    // From computer's hand
       if c_size == 0 {
         c_strght[c_size] = i.value();
-      }
-      else if i.value() == c_strght[c_size] - 1 {
         c_size += 1;
+      }
+      else if i.value() == c_strght[c_size-1] - 1 {
         c_strght[c_size] = i.value();
+        c_size += 1;
+        if i.value() == 2 && c_size == 4{
+            c_strght[c_size] = 1;
+            c_size += 1;
+        }
       }
       else {
         c_size = 0;
         c_strght[c_size] = i.value();
+        c_size += 1;
       }
     }
     if p_size != 5 {                    // From player's hand
       if p_size == 0 {
         p_strght[p_size] = j.value();
-      }
-      else if j.value() == p_strght[p_size] - 1 {
         p_size += 1;
-        p_strght[p_size] = j.value();
+      }
+      else if j.value() == p_strght[c_size-1] - 1 {
+        p_strght[c_size] = j.value();
+        p_size += 1;
+        if j.value() == 2 && p_size == 4{
+            p_strght[p_size] = 1;
+            p_size += 1;
+        }
       }
       else {
         p_size = 0;
         p_strght[p_size] = j.value();
+        p_size += 1;
       }
     }
+    
     if c_size == 5 && p_size == 5 {     // When hands have been gotten
       break;
     }
