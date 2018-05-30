@@ -26,9 +26,13 @@ fn main() {
   println!("Welcome to the Texas Hold'em Player.");
   println!("Warning: This is a prototope.");
   println!("you will be facing a computer"); 
-  println!("and can not determine who is the winner");
-  println!("of tie yet.");
+  println!("and the game is able to determine who is a winner,");
+  println!("even in the case of a tie.");
   println!("It is not meant for public use.");
+  println!("The following hands are ranked from lowest to highest (up to down):");
+  println!("\tHigh card\n\tOne pair\n\tTwo pair\n\tThreeof a kind");
+  println!("\tStraight\n\tFlush\n\tFull house\n\tFour of a kind");
+  println!("\tStraight flush\n\tRoyal flush");
   println!("ENTER: Continue, 1: Quit");
   
   /* Check user roption */
