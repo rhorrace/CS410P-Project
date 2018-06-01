@@ -1,8 +1,12 @@
 [package]
 name = "project"
 version = "0.1.0"
-authors = ["rhorrace"]
+authors = ["rhorrace <rhorrace@pdx.edu>"]
 
 [dependencies]
 rand = "0.3"
 cargonauts-cli = "0.2.3"
+
+[lib]
+name = "library"
+path = "src/lib.rs"
