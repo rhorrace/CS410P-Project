@@ -19,9 +19,9 @@ Some rules for Texas Hold'em:
 
   1. Highest hand wins (best 5 out of 7 cards)
   2. Ties are broken when someone:
-    1. Has a higher card values in hand  
-    2. Has higher kickers if matching set values
-    3. Otherwise, a tie
+    * Has a higher card values in hand  
+    * Has higher kickers if matching set values
+    * Otherwise, a tie
   3. There are 5 stages in this game after the welcome:
   4. normally there is betting, but there is no betting
      in this game at the moment.
@@ -43,22 +43,13 @@ Stages of the game after Welcoming the user:
 
 Values of hands 0 being lowest hand, 10 being highest:  
 
-  1. High card
-  2. One pair
-    * a pair of equal value cards
-  3. Two pair
-    * two one pairs
-  4. Three of a kind
-    * Three cards of same value
-  5. Straight
-    * 5 incremented cards (ex. 5,6,7,8,9)
-  6. Flush
-    * 5 cards of same suit
-  7. Full house
-    * A three of a kind and a pair/three of a kind
-  8. Four of a kind
-    * Four cards of same value
-  9. Straight flush
-    * 5 incremented cards of same suit
-  10. Royal flush
-    * highest straight flush possible, 10, J, Q, K ,A
+  1. High card       - no matching cards
+  2. One pair        - two cards of equal value cards
+  3. Two pair        - two one pairs
+  4. Three of a kind - three cards of same value
+  5. Straight        - 5 incremented cards (ex. 5,6,7,8,9)
+  6. Flush           - 5 cards of same suit
+  7. Full house      - a three of a kind and a pair/three of a kind
+  8. Four of a kind  - four cards of same value
+  9. Straight flush  - 5 incremented cards of same suit
+  10. Royal flush    - highest straight flush possible, 10, J, Q, K ,A
