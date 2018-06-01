@@ -3,6 +3,8 @@ CS 410P Project - Texas Hold'em
 
 ## Copyright © 2018 Robert Horrace
 
+Author: Robert Horrace <rhorrace@pdx.edu>  
+
 This project is a Texas Hold'em  
 project written in Rust. So far,  
 this is a prototype and only is half,  
@@ -69,12 +71,12 @@ it is a tie. The following cards are used for the specific hands:
   * One pair: pair, 3 highest cards (kickers)
   * Two pair: Highest 2 pairs, Highest kicker (one card)
   * Three of a kind: the three of a kind, 2 kickers
-  * Straight: Highest 5 card increment (ex. 1,2,3,4,5) High to low
+  * Straight: Highest 5 card increment (ex. Ace,2,3,4,5) High to low
   * Flush: Highest five cards of the same suit
   * Full House: High three of kind, then highest pair/three of kind
   * Four of a kind: Four of a kind, and highest kicker
   * Straight Flush: Highest 5 incremented card values of same suit, high to low
-  * Royal flush: Automatic tie, even though it is statistically impossible
+  * Royal flush: Automatic tie, even though it is statistically nearly impossible
 
 Main runs the game. The game has multiple stages. There is welcome  
 stage where the program welcomes the player. There is a deal stage  
