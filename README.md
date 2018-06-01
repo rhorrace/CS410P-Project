@@ -19,9 +19,9 @@ Some rules for Texas Hold'em:
 
   1. Highest hand wins (best 5 out of 7 cards)
   2. Ties are broken when someone:
-    * Has a higher card values in hand  
-    * Has higher kickers if matching set values
-    * Otherwise, a tie
+    1. Has a higher card values in hand  
+    2. Has higher kickers if matching set values
+    3. Otherwise, a tie
   3. There are 5 stages in this game after the welcome:
   4. normally there is betting, but there is no betting
      in this game at the moment.
@@ -32,12 +32,12 @@ Stages of the game after Welcoming the user:
     2. Flop stage
       * Three cards are put on the table
       * hand values are updated
-    3. Turn stage
+    3. Turn stage  
       * One card is put on the table
-      * hand values are updated
+      * Hand values are updated
     4. River stage
       * One card is put on the table
-      * hand values are updated
+      * Hand values are updated
     5. Computer shows hand, winner is declared
       * Will display you win, you lose, or tie
 
