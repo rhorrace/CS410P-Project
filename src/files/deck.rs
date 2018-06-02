@@ -33,11 +33,6 @@ impl Deck {
     self.tail - self.head
   }
   
-  /* Checks if deck is empty*/
-  pub fn _is_empty(self) -> bool {
-    self.head == self.tail
-  }
-  
   /*Build the deck, no Jokers*/
   pub fn build(&mut self) {
     /* Add 52 cards to the deck */
@@ -75,12 +70,5 @@ impl Deck {
   pub fn rem(&mut self) -> Card {
     self.head += 1;
     self.cards[self.head - 1]
-  }
-  
-  /* Display the whole deck (used for test run purposes)*/
-  pub fn _display(self) {
-    for crd in self.cards.iter() {
-      crd.display();
-    } 
   }
 }

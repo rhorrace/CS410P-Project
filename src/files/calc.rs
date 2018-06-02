@@ -174,7 +174,7 @@ impl Calc {
     let mut prev = 0;
     let mut count = 0;
     if self.plyr_hnd.iter()
-                 .any(|&x| x.value() == 14 && x.suit() == st) {
+                    .any(|&x| x.value() == 14 && x.suit() == st) {
       prev = 1;
       count = 1;
     }
