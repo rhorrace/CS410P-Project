@@ -7,7 +7,7 @@
 
 extern crate library;
 
-use library::files::game::*;
+use library::game::*;
 
 fn main() {
   for _ in 0..100 {

@@ -1,7 +1,7 @@
 extern crate library;
 
-use library::files::tie::*;
-use library::files::card::*;
+use library::game::tie::*;
+use library::game::card::*;
 
 #[test]
 fn high_card_chck() {
