@@ -1,9 +1,0 @@
-pub mod card;
-pub mod deck;
-pub mod dealer;
-pub mod table;
-pub mod player;
-pub mod calc;
-pub mod com;
-pub mod game;
-pub mod tie;
