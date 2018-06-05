@@ -22,7 +22,7 @@ fn main() {
   println!("even in the case of a tie.");
   println!("It is not meant for public use.");
   println!("The following hands are ranked from lowest to highest (up to down):");
-  println!("\tHigh card\n\tOne pair\n\tTwo pair\n\tThreeof a kind");
+  println!("\tHigh card\n\tOne pair\n\tTwo pair\n\tThree of a kind");
   println!("\tStraight\n\tFlush\n\tFull house\n\tFour of a kind");
   println!("\tStraight flush\n\tRoyal flush");
   println!("ENTER: Continue, 1: Quit");
