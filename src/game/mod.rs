@@ -52,17 +52,19 @@ pub fn read_user() -> i64 {
   x
 }
 
-/* Game that holds the player(s), dealer, table, and calc*/
+/* Game Struct */
 #[derive(Clone,Copy)]
 pub struct Game {
-  player: Player,
-  computer: Com,
-  dealer: Dealer,
-  table: Table,
-  calc: Calc,
+  player: Player, // Player
+  computer: Com,  // Computer (opponent)
+  dealer: Dealer, // The dealer
+  table: Table,   // The table
+  calc: Calc,     // The player's hand calc
 }
 
+/* Functions for Game struct */
 impl Game {
+  /* New function */
   pub fn new() -> Game {
     Game { player: Player::new(),
            computer: Com::new(),
@@ -95,6 +97,7 @@ impl Game {
     self.table.clear();
   }
 
+  /* Deal cards to computer and player */
   pub fn deal(&mut self) {
     let hands = self.dealer.deal();
     self.player.rcv_hand(hands[0]);
@@ -134,16 +137,19 @@ impl Game {
     self.table.display();
   }
   
+  /* Display player's hand */
   pub fn player(self) {
     print!("Your ");
     self.player.display();
     println!("Hand value: {}", self.player.get_combo());
   }
 
+  /* Display computer's hand */
   pub fn computer(self) {
     self.computer.display();
   }
 
+  /* Compute and display winner function */
   pub fn winner(self) {
     let c = self.computer.get_val();
     let p = self.player.get_val();
@@ -193,7 +199,10 @@ impl Game {
   fn tie(self,com: [Card; 5],plyr: [Card; 5]) -> i64 {
     for (i,j) in com.iter()
                     .zip(plyr.iter()) {
-      if i.value() > j.value() {        // Computer wins
+      if i.value() == j.value() {
+        continue;
+      }
+      else if i.value() > j.value() {   // Computer wins
         return -1;
       }
       else if i.value() < j.value() {   // Computer wins

@@ -12,7 +12,7 @@ use game::card::*;
 /* For flop,turn,river */
 #[derive(Clone,Copy)]
 pub struct Table {
-    f_t_r: [Card; 5],
+    f_t_r: [Card; 5], // Flop, turn, river
 }
 
 /* Impl for Table structure */
@@ -22,6 +22,7 @@ impl Table {
     Table {f_t_r: [Card::new(); 5]}
   }  
 
+  /* Clear table function */
   pub fn clear(& mut self) {
     self.f_t_r = [Card::new(); 5];
   }
@@ -55,6 +56,7 @@ impl Table {
     println!();
   }
 
+  /* Display turn/river */
   fn disp_card(self, i: usize) {
     if self.f_t_r[i].value() != 0 {
       match i {
@@ -66,6 +68,7 @@ impl Table {
     }
   }
 
+  /* Display table */
   pub fn display(self) {
     println!("Table: ");
     self.disp_flop();

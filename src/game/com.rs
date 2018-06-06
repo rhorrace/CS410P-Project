@@ -14,13 +14,12 @@ use game::calc::*;
 /* Com struct, holding hand and option value */
 #[derive(Clone,Copy)]
 pub struct Com {
-  hand: Player,
-  calc: Calc,
+  hand: Player, // Com's hand
+  calc: Calc,   // Com's hand calc
 }
 
 /* Impl for Com struct */
 impl Com {
-  
   /* New function */
   pub fn new() -> Com {
     Com { hand: Player::new(),

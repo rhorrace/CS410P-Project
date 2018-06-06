@@ -11,7 +11,7 @@ pub struct Card {
   suit: i64,
 }
 
-/* Impl for card struct */
+/* PartialEq for Card struct */
 impl PartialEq for Card {
   /* == , value only, not suit*/
   fn eq(&self, other: &Self) -> bool {
@@ -24,7 +24,7 @@ impl PartialEq for Card {
   }
 }
 
-/* Impl for card struct */
+/* Functions for Card */
 impl Card {
   /* Initialize the card */
   pub fn new() -> Card {

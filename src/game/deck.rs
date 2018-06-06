@@ -10,14 +10,15 @@ extern crate rand;
 use self::rand::{Rng,StdRng};
 use game::card::*;
 
+/* Deck struct */
 #[derive(Clone,Copy)]
 pub struct Deck {
-  cards: [Card; 52],
-  head: usize,
-  tail: usize,
+  cards: [Card; 52],  // Array of cards
+  head: usize,        // Top of deck (should start at 0)
+  tail: usize,        // Bottom of deck (should be 52)
 }
 
-/* Functions for the Deck structure */
+/* Functions for Deck */
 impl Deck {
   /* The new function */
   pub fn new() -> Deck {

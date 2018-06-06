@@ -9,12 +9,14 @@
 
 use game::card::*;
 
+/* Player struct */
 #[derive(Clone,Copy)]
 pub struct Player {
-  hand: [Card; 2],
-  combo: u64, // 0 for high card, 9 for Royal flush
+  hand: [Card; 2], // Player's two starting cards
+  combo: u64,      // 0 for high card, 9 for Royal flush
 }
 
+/* Functions for Player */
 impl Player {
   /* Initialize new player */
   pub fn new() -> Player {
@@ -28,6 +30,7 @@ impl Player {
     self.combo = 0;
   }
 
+  /* Get combo val*/
   pub fn get_val(self) -> u64 {
     self.combo
   }

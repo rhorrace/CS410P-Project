@@ -13,12 +13,13 @@ use game::card::*;
 /* Calc struct for holding total hand */
 #[derive(Clone,Copy)]
 pub struct Calc {
-  plyr_hnd: [Card; 7],
-  hand_sz: usize,
-  card_cnt: [i64; 15],
-  suit_cnt: [i64; 5],
+  plyr_hnd: [Card; 7],  // Player total hand
+  hand_sz: usize,       // Amount of cards in hand
+  card_cnt: [i64; 15],  // Count of card values
+  suit_cnt: [i64; 5],   // Count of card suits
 }
 
+/* functions for Calc */
 impl Calc {
   /* New function */
   pub fn new() -> Calc {
@@ -159,7 +160,8 @@ impl Calc {
       prev = card.value();
     }
     if prev == 2 && count == 4 {
-      return self.plyr_hnd.iter().any(|x| x.value() == 14);
+      return self.plyr_hnd.iter()
+                          .any(|x| x.value() == 14);
     }
     false
   }
@@ -168,24 +170,23 @@ impl Calc {
   fn straight_flush(self,st: i64) -> bool {
     let mut prev = 0;
     let mut count = 0;
-    if self.plyr_hnd.iter()
-                    .any(|&x| x.value() == 14 && x.suit() == st) {
-      prev = 1;
-      count = 1;
-    }
-    for crd in self.plyr_hnd.iter()
-                         .filter(|x| x.suit() == st) {
-      if crd.value() == prev + 1 {
+    for card in self.plyr_hnd.iter()
+                             .rev()
+                             .filter(|x| x.suit() == st) {
+      if card.value() == prev - 1 {
         count += 1;
-        prev += 1;
+        if count == 5 {
+          return true;
+        }
       }
       else {
-        prev = crd.value();
         count = 1;
       }
+      prev = card.value();
     }
-    if count >= 5 {
-      return true;
+    if prev == 2 && count == 4 {
+      return self.plyr_hnd.iter()
+                          .any(|x| x.value() == 14 && x.suit() == st);
     }
     false
   }
@@ -238,7 +239,8 @@ impl Calc {
     }
     val                                   // High card if all flags fail
   } 
-  
+ 
+  /* Get best hand from the 7 cards */ 
   pub fn best_hand(self,hand_val: u64) -> [Card; 5] {
     let mut hand = [Card::new(); 5];
     let mut i = 0;
@@ -426,6 +428,6 @@ impl Calc {
         }
       },
     }
-    hand
+    hand  // return hand
   }
 } 

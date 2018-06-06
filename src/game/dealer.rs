@@ -10,13 +10,13 @@
 use game::card::*;
 use game::deck::*;
 
-/* Dealer handles deck of cards and distributing cards */
+/* Dealer struct*/
 #[derive(Clone,Copy)]
 pub struct Dealer {
-  deck: Deck,
+  deck: Deck, // Dealer's deck of cards
 }
 
-/* */
+/* Functions for Dealer */
 impl Dealer {
   /* Initialize dealer with a full deck of cards */
   pub fn new() -> Dealer {
