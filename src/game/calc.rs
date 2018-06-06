@@ -53,11 +53,11 @@ impl Calc {
   }
 
   /* Get maximum suit , will only be used when there is a flush */
-  pub fn max_suit(self) -> i64 {
+  fn max_suit(self) -> i64 {
     let mut i = 0;
     for (j, &val) in self.suit_cnt.iter()
-                                  .skip(1)
-                                  .enumerate() {
+                                  .enumerate()
+                                  .skip(1) {
       if val > self.suit_cnt[i] {
         i = j;
       }
@@ -68,14 +68,13 @@ impl Calc {
   /* Standard insertion sort */
   fn sort(&mut self) {
     for i in 1..self.hand_sz {
-      let key = self.plyr_hnd[i];
-      let mut j = i-1;
-      while j > 0 && self.plyr_hnd[j].value() > key.value() {
-        self.plyr_hnd[j+1] = self.plyr_hnd[j];
-        j -= 1;
+      for j in (1..i+1).rev() {
+        if self.plyr_hnd[j-1].value() <= self.plyr_hnd[j].value() {
+          break;
+        }
+        self.plyr_hnd.swap(j-1,j);
       }
-      self.plyr_hnd[j+1] = key;
-    }
+    }  
   }
 
   /* Add player's hand to Calc */
@@ -141,32 +140,28 @@ impl Calc {
 
   /* Check if a straight is in hand */
   fn check_strght(self) -> bool {
-    let len = self.card_cnt.iter()
-                           .skip(1)
-                           .filter(|x| **x > 0)
-                           .count();
-    if len < 5 {
-      return false;
-    }
-    let strght = self.card_cnt.iter()
-                              .skip(1)
-                              .enumerate()
-                              .filter(|(_,x)| **x > 0);
-    let mut prev = 0;
-    let mut count = 1;
-    for (i,_) in strght {
-      if i == prev + 1 {
+    let mut count = 0;
+    let mut prev = 1;
+    for card in self.plyr_hnd.iter()
+                             .rev() {
+      if card.value() == prev - 1 {
         count += 1;
+        if count == 5 {
+          return true;
+        }
+      }
+      else if card.value() == prev {
+        continue;
       }
       else {
-        if count >= 5 {
-          break;
-        }
         count = 1;
       }
-      prev = i;
+      prev = card.value();
     }
-    count >= 5
+    if prev == 2 && count == 4 {
+      return self.plyr_hnd.iter().any(|x| x.value() == 14);
+    }
+    false
   }
 
   /* Check for straight flush */
@@ -244,5 +239,193 @@ impl Calc {
     val                                   // High card if all flags fail
   } 
   
-
+  pub fn best_hand(self,hand_val: u64) -> [Card; 5] {
+    let mut hand = [Card::new(); 5];
+    let mut i = 0;
+    match hand_val {
+    9 =>  // Royal Flush
+      {
+        let suit = self.max_suit();
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| x.suit() == suit)
+                                 .rev()
+                                 .take(5) {
+          hand[i] = *card;
+          i += 1;
+        }
+      },
+    8 =>  // Straight Flush
+      {
+        let suit = self.max_suit();
+        let mut i = 0;
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| x.suit() == suit)
+                                 .rev() {
+          if i == 0{
+            hand[i] = *card;
+            i += 1;
+          }
+          else if card.value() == hand[i-1].value() - 1 {
+            hand[i] = *card;
+            i += 1;
+            if i == 5 {
+              break;
+            }
+          }
+          else {
+            i = 0;
+            hand[i] = *card;
+            i += 1;
+          }
+        }
+        if i == 4 {
+          hand[i].change(1,suit);
+        }
+      },
+    7 =>  // Four of a kind
+      {
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] == 4)
+                                 .take(4) {
+          hand[i] = *card;
+          i += 1;
+        }
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] < 4)
+                                 .rev()
+                                 .take(1) {
+          hand[i] = *card;
+          i += 1;
+        }
+      },
+    6 =>  // Full house
+      {
+        let mut used = [0; 1];
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] == 3)
+                                 .rev()
+                                 .take(3) {
+          hand[i] = *card;
+          i += 1;
+          used[0] = card.value();
+        }
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] > 1 &&
+                                             x.value() != used[0])
+                                 .rev()
+                                 .take(2) {
+          hand[i] = *card;
+          i += 1;
+        }
+      },
+    5 =>  // Flush
+      {
+        let suit = self.max_suit();
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| x.suit() == suit)
+                                 .rev()
+                                 .take(5) {
+          hand[i] = *card;
+          i += 1;
+        }
+      },
+    4 =>  // Straight
+      {
+        for card in self.plyr_hnd.iter()
+                                 .rev() {
+          if i == 0 {
+            hand[i] = *card;
+            i += 1;
+          }
+          else if card.value() == hand[i-1].value() - 1 {
+            hand[i] = *card;
+            i += 1;
+            if i == 5 {
+              break;
+            }
+          }
+          else if card.value() == hand[i-1].value() {
+            continue;
+          }
+          else {
+            i = 0;
+            hand[i] = *card;
+            i += 1;
+          }
+        }
+        if i == 4 {
+          for card in self.plyr_hnd.iter()
+                                   .filter(|x| x.value() == 14) 
+                                   .take(1) {
+            hand[i] = *card;
+            hand[i].change(1,card.suit());
+            i += 1;
+          }
+        }
+      },
+    3 =>  // Three of a kind
+      {
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] == 3)
+                                 .rev() {
+          hand[i] = *card;
+          i += 1;
+        }
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] == 1)
+                                 .rev()
+                                 .take(2) {
+          hand[i] = *card;
+          i += 1;
+        }
+      },
+    2 =>  // Two pair
+      {
+        let mut used = [0; 4];
+        let mut j = 0;
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] == 2)
+                                 .rev()
+                                 .take(4) {
+          hand[i] = *card;
+          i += 1;
+          used[j] = card.value();
+          j += 1;
+        }
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] > 0 &&
+                                             !used.iter().any(|&y| y == x.value()))
+                                 .rev()
+                                 .take(1) {
+          hand[i] = *card;
+          i += 1;
+        }
+      },
+    1 =>  // One pair 
+      {
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] == 2) {
+          hand[i] = *card;
+          i += 1;
+        }
+        for card in self.plyr_hnd.iter()
+                                 .filter(|x| self.card_cnt[x.value() as usize] == 1)
+                                 .rev()
+                                 .take(3) {
+          hand[i] = *card;
+          i += 1;
+        }
+      },
+    _ =>  // High card
+      {
+        for card in self.plyr_hnd.iter()
+                                 .rev()
+                                 .take(5) {
+          hand[i] = *card;
+          i += 1;
+        }
+      },
+    }
+    hand
+  }
 } 

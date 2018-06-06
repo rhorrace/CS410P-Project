@@ -60,23 +60,27 @@ impl Card {
       return;
     }
     else if self.name < 11 {
-      print!("{} of ",self.name);
+      match self.name {
+       1 => print!("A  ; "),
+      10 => print!("{} ; ",self.name),
+       _ => print!("{}  ; ",self.name),
+      }
     }
     else {
       match self.name {
-        11 => print!("Jack of "),
-        12 => print!("Queen of "),
-        13 => print!("King of "),
-        14 => print!("Ace of "),
-        _  => print!("Joker"),
+      11 => print!("J  ; "),
+      12 => print!("Q  ; "),
+      13 => print!("K  ; "),
+      14 => print!("A  ; "),
+       _ => print!("Joker"),
       }
     }
     match self.suit {
-      1 => print!("Hearts"),
-      2 => print!("Spades"),
-      3 => print!("Diamonds"),
-      4 => print!("Clubs"),
-      _ => print!(""),
+    1 => print!("Hearts  "),
+    2 => print!("Spades  "),
+    3 => print!("Diamonds"),
+    4 => print!("Clubs   "),
+    _ => print!(""),
     }
   }
   
@@ -87,14 +91,18 @@ impl Card {
       return;
     }
     else if self.name < 11 {
-      print!("{} of ",self.name);
+      match self.name {
+       1 => print!("A  ; "),
+      10 => print!("{} ; ",self.name),
+       _ => print!("{}  ; ",self.name),
+      }
     }
     else {
       match self.name {
-        11 => print!("Jack of "),
-        12 => print!("Queen of "),
-        13 => print!("King of "),
-        14 => print!("Ace of "),
+        11 => print!("J  ; "),
+        12 => print!("Q  ; "),
+        13 => print!("K  ; "),
+        14 => print!("A  ; "),
         _  => print!("Joker"),
       }
     }

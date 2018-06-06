@@ -41,11 +41,6 @@ impl Com {
     self.calc.get_card_cnt()
   }
   
-  /* Get maximum suit in hand,only when there is flush */
-  pub fn max_suit(self) -> i64 {
-    self.calc.max_suit()
-  } 
-  
   /* Clear function, cleans up variables for next game*/
   pub fn clear(&mut self) {
     self.hand.clear();
@@ -74,6 +69,12 @@ impl Com {
   pub fn display(self) {
     print!("Computer's ");
     self.hand.display();
-    println!("Computer's hand value: {}", self.hand.get_combo());
+    println!("Hand value: {}", self.hand.get_combo());
+    self.calc.best_hand(self.hand.get_val());
+  }
+
+  /* Return com's best hand */
+  pub fn best_hand(self) -> [Card; 5]{
+    self.calc.best_hand(self.hand.get_val())
   }
 }

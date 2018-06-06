@@ -14,10 +14,9 @@ pub mod table;
 pub mod player;
 pub mod calc;
 pub mod com;
-pub mod tie;
 
 use std::io::*;
-use self::{dealer::*,player::*,table::*,calc::*,com::*,tie::*};
+use self::{card::*,dealer::*,player::*,table::*,calc::*,com::*};
 
 /* Read input from the user */
 pub fn read_user() -> i64 {
@@ -136,9 +135,9 @@ impl Game {
   }
   
   pub fn player(self) {
-    print!("Player's ");
+    print!("Your ");
     self.player.display();
-    println!("Player's hand value: {}", self.player.get_combo());
+    println!("Hand value: {}", self.player.get_combo());
   }
 
   pub fn computer(self) {
@@ -148,14 +147,40 @@ impl Game {
   pub fn winner(self) {
     let c = self.computer.get_val();
     let p = self.player.get_val();
-    if c > p {                      // If com has higher value
+    let com_hand = self.computer.best_hand();
+    let plyr_hand = self.calc.best_hand(p);
+    let mut count = 0;
+    print!("Computer's hand: ");
+    for card in com_hand.iter() {
+      card.display();
+      count += 1;
+      if count < 5 {
+        print!(" | ");
+      } 
+      else {
+        println!();
+      }
+    }
+    count = 0;
+    print!("Your hand: \t ");
+    for card in plyr_hand.iter() {
+      card.display();
+      count += 1;
+      if count < 5 {
+        print!(" | ");
+      } 
+      else {
+        println!();
+      }
+    }
+    if c > p {                          // If com has higher value
       println!("Sorry, you lose");
     }
-    else if p > c {                 // If player has higher value
+    else if p > c {                     // If player has higher value
       println!("Yay, you win");
     }
-    else {                          // If tie
-      let win = self.tie(p);
+    else {                              // If tie
+      let win = self.tie(com_hand,plyr_hand);
       match win {
         -1 => println!("Sorry, you lose"),
          1 => println!("Yay, you win"),
@@ -164,18 +189,17 @@ impl Game {
     }
   }
 
-  fn tie(self,val: u64) -> i64 {
-    match val {
-      0 => high_card(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
-      1 => one_pair(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
-      2 => two_pair(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
-      3 => three_of_kind(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
-      4 => straight(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
-      5 => flush(self.computer.get_hnd(),self.computer.max_suit(),self.calc.get_hnd(),self.calc.max_suit()),
-      6 => full_house(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
-      7 => four_of_kind(self.computer.get_card_cnt(),self.calc.get_card_cnt()),
-      8 => straight_flush(self.computer.get_hnd(),self.computer.max_suit(),self.calc.get_hnd(),self.calc.max_suit()),
-      _ => 0,
+  /* Tie breaker function */
+  fn tie(self,com: [Card; 5],plyr: [Card; 5]) -> i64 {
+    for (i,j) in com.iter()
+                    .zip(plyr.iter()) {
+      if i.value() > j.value() {        // Computer wins
+        return -1;
+      }
+      else if i.value() < j.value() {   // Computer wins
+        return 1;
+      }
     }
+    0                                   // Tie
   }
 }
