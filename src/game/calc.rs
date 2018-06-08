@@ -47,12 +47,6 @@ impl Calc {
     self.suit_cnt = [0; 5];
   }
 
-  /* Check if hand contains a certain card */
-  fn contains(self,val: i64, st: i64) -> bool {
-    self.plyr_hnd.iter()
-                 .any(|&x| x.value() == val && x.suit() == st)
-  }
-
   /* Get maximum suit , will only be used when there is a flush */
   fn max_suit(self) -> i64 {
     let mut i = 0;
@@ -191,6 +185,19 @@ impl Calc {
     false
   }
 
+  fn royal_flush(self,st: i64) -> bool {
+    let mut flush = self.plyr_hnd.iter()
+                                 .rev()
+                                 .filter(|x| x.suit() == st)
+                                 .take(5);
+    let mut ace = Card::new();
+    ace.change(14,st);
+    let mut ten = Card::new();
+    ten.change(10,st);
+    flush.nth(0) == Some(&ace) && flush.last() == Some(&ten)
+    
+  }
+
   /* Calculate hand value */
   pub fn calc_hand(self) -> u64 {
     let mut val: u64 = 0;
@@ -203,21 +210,14 @@ impl Calc {
       let suit = self.max_suit();
       if straight {                      // If straight
         if self.straight_flush(suit) {   // If straight flush
-          let mut have = false;
-          for i in 10..15 {              // Check royal flush
-            have = self.contains(i as i64,suit);
-            if !have {
-              break;
-            }
-          }
-          match have {                    // If has allplyr_hnd for RF
-            true  => val = 9,             // Royal Flush
-            false => val = 8,             // Straight Flush
+          match self.royal_flush(suit) { // If has all plyr_hnd for RF
+            true  => val = 9,            // Royal Flush
+            false => val = 8,            // Straight Flush
           }
         }
       }
       else {
-        match fours {                     // If Four of a Kind
+        match fours {                     // If four of a Kind
           1 => val = 7,                   // Four of a kind
           _ => val = 5,                   // Flush
         }
