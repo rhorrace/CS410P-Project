@@ -92,17 +92,17 @@ impl Card {
     }
     else if self.name < 11 {
       match self.name {
-       1 => print!("A  ; "),
-      10 => print!("{} ; ",self.name),
-       _ => print!("{}  ; ",self.name),
+       1 => print!("A ; "),
+      10 => print!("{}; ",self.name),
+       _ => print!("{} ; ",self.name),
       }
     }
     else {
       match self.name {
-        11 => print!("J  ; "),
-        12 => print!("Q  ; "),
-        13 => print!("K  ; "),
-        14 => print!("A  ; "),
+        11 => print!("J ; "),
+        12 => print!("Q ; "),
+        13 => print!("K ; "),
+        14 => print!("A ; "),
         _  => print!("Joker"),
       }
     }

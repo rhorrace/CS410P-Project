@@ -46,7 +46,7 @@ impl Table {
 
   /* Display flop */
   fn disp_flop(self) {
-    print!("\t Flop: ");
+    print!("\tFlop:\t");
     for i in 0..3 {
       self.f_t_r[i].display();
       if i != 2 {
@@ -60,8 +60,8 @@ impl Table {
   fn disp_card(self, i: usize) {
     if self.f_t_r[i].value() != 0 {
       match i {
-        3 => print!("\t Turn: "),
-        4 => print!("\tRiver: "),
+        3 => print!("\tTurn:\t"),
+        4 => print!("\tRiver:\t"),
         _ => print!(""),
       }
       self.f_t_r[i].display_ln();

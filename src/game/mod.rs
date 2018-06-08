@@ -158,7 +158,7 @@ impl Game {
     let com_hand = self.computer.best_hand();
     let plyr_hand = self.calc.best_hand(p);
     let mut count = 0;
-    print!("Computer's hand: ");
+    print!("Com's hand:\t");
     for card in com_hand.iter() {
       card.display();
       count += 1;
@@ -170,7 +170,7 @@ impl Game {
       }
     }
     count = 0;
-    print!("Your hand: \t ");
+    print!("Your hand:\t");
     for card in plyr_hand.iter() {
       card.display();
       count += 1;
