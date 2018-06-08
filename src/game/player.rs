@@ -68,7 +68,7 @@ impl Player {
   }
 
   pub fn display(self) {
-    print!("Hand: ");
+    print!("Hand:\t");
     for crd in self.hand.iter() {
       crd.display();
       if !crd.is(&self.hand[1]) {

@@ -29,15 +29,18 @@ Stages of the game after Welcoming the user:
 
     1. Receive starting two cards to you and computer
     2. Flop stage
+    * One card is discarded
     * Three cards are put on the table
     * hand values are updated
     3. Turn stage  
+    * One card is discarded
     * One card is put on the table
     * Hand values are updated
     4. River stage
+    * One card is discarded
     * One card is put on the table
     * Hand values are updated
-    5. Computer shows hand, winner is declared
+    5. Playerand Computer's best hand are displayed, winner is declared
     * Will display you win, you lose, or tie
 
 Values of hands 0 being lowest hand, 10 being highest:  

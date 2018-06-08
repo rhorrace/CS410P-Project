@@ -21,7 +21,7 @@ use self::{card::*,dealer::*,player::*,table::*,calc::*,com::*};
 /* Read input from the user */
 pub fn read_user() -> i64 {
   let mut buffer = String::new();
-  let x: i64;
+  let mut x: i64;
   loop {
     buffer.clear();
     let _ = stdout().flush();
@@ -39,13 +39,15 @@ pub fn read_user() -> i64 {
                 .parse::<i64>()
                 .unwrap();
       if x != 1 {
-        println!("Error: Not a valid number");
+        println!("Error: Not a valid option");
         println!("ENTER: Continue, 1: Quit");
       }
-      break;
+      else {
+        break;
+      }
     }
     else {
-      println!("Error: Not a valid number");
+      println!("Error: Not a valid option");
       println!("ENTER: Continue, 1: Quit");
     }
   }
@@ -141,7 +143,7 @@ impl Game {
   pub fn player(self) {
     print!("Your ");
     self.player.display();
-    println!("Hand value: {}", self.player.get_combo());
+    println!("Hand value:\t{}", self.player.get_combo());
   }
 
   /* Display computer's hand */
@@ -182,7 +184,7 @@ impl Game {
     if c > p {                          // If com has higher value
       println!("Sorry, you lose");
     }
-    else if p > c {                     // If player has higher value
+    else if c < p {                     // If player has higher value
       println!("Yay, you win");
     }
     else {                              // If tie
@@ -199,11 +201,11 @@ impl Game {
   fn tie(self,com: [Card; 5],plyr: [Card; 5]) -> i64 {
     for (i,j) in com.iter()
                     .zip(plyr.iter()) {
-      if i.value() == j.value() {
+      if i.value() == j.value() {       // Tie, next card
         continue;
       }
       else if i.value() > j.value() {   // Computer wins
-        return -1;
+       return  -1;
       }
       else if i.value() < j.value() {   // Computer wins
         return 1;

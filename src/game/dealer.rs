@@ -37,7 +37,7 @@ impl Dealer {
 
   /* Check if size of deck is enough for a play */
   pub fn check_deck(self) -> bool {
-    self.deck.size() >= 9
+    self.deck.size() >= 12
   }
 
   /* "Remove" two cards from top of deck and give to player */
@@ -54,6 +54,7 @@ impl Dealer {
   /* Return cards for the flop */
   pub fn flop(&mut self) -> [Card; 3] {
     let mut flp = [Card::new(); 3];
+    let _ = self.deck.rem();  // Discard a card
     for i in 0..3 {
       flp[i] = self.deck.rem();
     }
@@ -62,12 +63,14 @@ impl Dealer {
 
   /* Return the turn */
   pub fn turn(&mut self) -> Card {
+    let _ = self.deck.rem();  // Discard a card
     self.deck.rem()
   }
 
   /* Return the river (same as turn, 
      but easier to differentiate by name */
   pub fn river(&mut self) -> Card {
+    let _ = self.deck.rem();  // Discard a card
     self.deck.rem()
   }
 }

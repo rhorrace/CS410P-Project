@@ -66,9 +66,9 @@ impl Com {
 
   /* Display function */
   pub fn display(self) {
-    print!("Computer's ");
+    print!("Com's ");
     self.hand.display();
-    println!("Hand value: {}", self.hand.get_combo());
+    println!("Hand value:\t{}", self.hand.get_combo());
     self.calc.best_hand(self.hand.get_val());
   }
 
